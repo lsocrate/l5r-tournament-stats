@@ -12,9 +12,9 @@ tournament.player.sample <- function (tournamentId) {
 tournament.clan.results.for.player <- function(validPlayerIds, tournamentId, playerId) {
   matches <- fromJSON(paste0("http://thelotuspavilion.com/api/v3/games?swiss_only=1&tournament_id=", tournamentId, "&player_id=", playerId), simplifyDataFrame = TRUE)
   matches %>%
-    filter(p1_id %in% validPlayerIds || p2_id %in% validPlayerIds) %>%
-    mutate(winner_clan = ifelse( p1_points > p2_points, p1_clan, p2_clan))  %>%
-    select(p1_clan, p2_clan, winner_clan)
+    dplyr::filter(p1_id %in% validPlayerIds || p2_id %in% validPlayerIds) %>%
+    dplyr::mutate(winner_clan = ifelse( p1_points > p2_points, p1_clan, p2_clan))  %>%
+    dplyr::select(p1_clan, p2_clan, winner_clan)
 }
 
 group.by.result <- function (clan, results) {
@@ -24,5 +24,7 @@ group.by.result <- function (clan, results) {
 }
 
 victory.ratio <- function(grouped.by.results) {
-  grouped.by.results %>% group_by(target, opponent) %>% summarise(victory.rate = sum(won)/n())
+  grouped.by.results %>%
+    dplyr::group_by(target, opponent)  %>%
+    dplyr::summarise(victory.rate = sum(won)/n())
 }
