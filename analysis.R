@@ -12,4 +12,5 @@ clean.results <- all.results %>% dplyr::filter(!is.na(p1_clan)) %>% dplyr::filte
 all.grouped <- Reduce(rbind.data.frame, lapply(clanList, group.by.result, results=clean.results))
 ratio <- victory.ratio(all.grouped)
 
-print(ratio)
+dir.create(file.path("output"), showWarnings = FALSE)
+write.csv(ratio, file.path("output", "win-ratio.csv"))
